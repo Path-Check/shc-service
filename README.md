@@ -14,9 +14,9 @@ npm explore @pathcheck/shc-sdk -- npm run-script keys "$PWD"/keys
 
 Copy the `./keys/jwks.json` file to the `.well-known` directory of the domain you want to use to sign the QRs
 
-## 2. Connect this GitHub repo  to Heroku
+## 3. Connect this GitHub repo  to Heroku
 
-## 3. On Heroku, update the ENVIRONMENT variables to use the generated keys
+## 4. On Heroku, update the ENVIRONMENT variables to use the generated keys
 
 ```
 K1 = <Your private key from ./keys/jsks.private.json>  
