@@ -1,4 +1,5 @@
-# Creates Cred Credentials on the Server Side using Smart Health Cards
+# Creates Smart Health Cards on the Server Side
+
 # Development Overview
 
 This is a NodeJS + Express app
