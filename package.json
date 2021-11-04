@@ -1,6 +1,6 @@
 {
   "name": "@pathcheck/shc-service",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "A Serverside Verifiable QR Code Generator using SmartHealth Cards",
   "main": "server.js",
   "scripts": {
