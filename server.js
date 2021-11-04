@@ -26,69 +26,14 @@ const privateKey = process.env.K1
 const publicKeyLink = process.env.K1LINK || "https://pcf.pw"; // DEMO URL
 
 app.post("/shc", async function (req, res) {
-  let inputs = {
-    familyName: req.body.familyName,
-    givenName: req.body.givenName,
-    dob: req.body.dob,
-    vaccinationDate: req.body.vaccinationDate, 
-    lotNumber: req.body.lotNumber
-  };
-
+  // Body of the request should have the credentialSubject of the Smart Health Cards specification
   let FHIRPayload = {
     type: [
       "https://smarthealth.cards#health-card",
       "https://smarthealth.cards#immunization",
       "https://smarthealth.cards#covid19",
     ],
-    credentialSubject: {
-      fhirVersion: "4.0.1",
-      fhirBundle: {
-        resourceType: "Bundle",
-        type: "collection",
-        entry: [
-          {
-            fullUrl: "resource:0",
-            resource: {
-              resourceType: "Patient",
-              name: [
-                {
-                  family: inputs.familyName,
-                  given: [inputs.givenName],
-                },
-              ],
-              birthDate: inputs.dob,
-            },
-          },
-          {
-            fullUrl: "resource:1",
-            resource: {
-              resourceType: "Immunization",
-              status: "completed",
-              vaccineCode: {
-                coding: [
-                  {
-                    system: "http://hl7.org/fhir/sid/cvx",
-                    code: "207",
-                  },
-                ],
-              },
-              patient: {
-                reference: "resource:0",
-              },
-              occurrenceDateTime: inputs.vaccinationDate,
-              performer: [
-                {
-                  actor: {
-                    display: "ABC General Hospital",
-                  },
-                },
-              ],
-              lotNumber: inputs.lotNumber,
-            },
-          },
-        ],
-      },
-    },
+    credentialSubject: req.body,
   };
 
   const jwt = await SHC.makeJWT(FHIRPayload, 48, publicKeyLink);
@@ -104,7 +49,57 @@ app.listen(port, () => {
   console.log(`Listening to requests on http://localhost:${port}`);
 });
 
+//curl -X POST -d '{"fhirVersion": "4.0.1"}' -H 'Content-Type: application/json' http://localhost:8000/shc
 
-//curl -X POST -d '{"familyName": "Pamplona", "givenName": "Vitor", "dob": "1922-07-27", "vaccinationDate": "2021-09-12",  "lotNumber": "0122312"}' -H 'Content-Type: application/json' http://localhost:8000/shc
+/*
+curl -X POST -d '{
+      "fhirVersion": "4.0.1",
+      "fhirBundle": {
+        "resourceType": "Bundle",
+        "type": "collection",
+        "entry": [
+          {
+            "fullUrl": "resource:0",
+            "resource": {
+              "resourceType": "Patient",
+              "name": [
+                {
+                  "family": "Pamplona",
+                  "given": ["Vitor", "Fernando"]
+                }
+              ],
+              "birthDate": "1955-01-01"
+            }
+          },
+          {
+            "fullUrl": "resource:1",
+            "resource": {
+              "resourceType": "Immunization",
+              "status": "completed",
+              "vaccineCode": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/sid/cvx",
+                    "code": "207"
+                  }
+                ]
+              },
+              "patient": {
+                "reference": "resource:0"
+              },
+              "occurrenceDateTime": "2021-07-01",
+              "performer": [
+                {
+                  "actor": {
+                    "display": "ABC General Hospital"
+                  }
+                }
+              ],
+              "lotNumber": "#0001221"
+            }
+          }
+        ]
+      }
+    }' -H 'Content-Type: application/json' http://localhost:8000/shc
 
-    
+    */
