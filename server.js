@@ -49,7 +49,7 @@ app.listen(port, () => {
   console.log(`Listening to requests on http://localhost:${port}`);
 });
 
-//curl -X POST -d '{"fhirVersion": "4.0.1"}' -H 'Content-Type: application/json' http://localhost:8000/shc
+//curl -X POST -d '{"fhirVersion": "4.0.1"}' -H '"Content-Type": "application/json"' http://localhost:8000/shc
 
 /*
 curl -X POST -d '{
