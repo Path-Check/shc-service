@@ -36,7 +36,7 @@ app.post("/shc", async function (req, res) {
     credentialSubject: req.body,
   };
 
-  const jwt = await SHC.makeJWT(FHIRPayload, 48, publicKeyLink);
+  const jwt = await SHC.makeJWT(FHIRPayload, publicKeyLink);
   const qrUri = await SHC.signAndPack(jwt, privateKey);
 
   let returnPayload = {
@@ -48,58 +48,3 @@ app.post("/shc", async function (req, res) {
 app.listen(port, () => {
   console.log(`Listening to requests on http://localhost:${port}`);
 });
-
-//curl -X POST -d '{"fhirVersion": "4.0.1"}' -H '"Content-Type": "application/json"' http://localhost:8000/shc
-
-/*
-curl -X POST -d '{
-      "fhirVersion": "4.0.1",
-      "fhirBundle": {
-        "resourceType": "Bundle",
-        "type": "collection",
-        "entry": [
-          {
-            "fullUrl": "resource:0",
-            "resource": {
-              "resourceType": "Patient",
-              "name": [
-                {
-                  "family": "Pamplona",
-                  "given": ["Vitor", "Fernando"]
-                }
-              ],
-              "birthDate": "1955-01-01"
-            }
-          },
-          {
-            "fullUrl": "resource:1",
-            "resource": {
-              "resourceType": "Immunization",
-              "status": "completed",
-              "vaccineCode": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/sid/cvx",
-                    "code": "207"
-                  }
-                ]
-              },
-              "patient": {
-                "reference": "resource:0"
-              },
-              "occurrenceDateTime": "2021-07-01",
-              "performer": [
-                {
-                  "actor": {
-                    "display": "ABC General Hospital"
-                  }
-                }
-              ],
-              "lotNumber": "#0001221"
-            }
-          }
-        ]
-      }
-    }' -H 'Content-Type: application/json' http://localhost:8000/shc
-
-    */

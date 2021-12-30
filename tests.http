@@ -1,0 +1,55 @@
+@API_URL = http://localhost:8000
+
+### Create Cred without any cert
+POST {{API_URL}}/shc  HTTP/1.1
+Content-Type: application/json
+
+{
+  "fhirVersion": "4.0.1",
+  "fhirBundle": {
+    "resourceType": "Bundle",
+    "type": "collection",
+    "entry": [
+      {
+        "fullUrl": "resource:0",
+        "resource": {
+          "resourceType": "Patient",
+          "name": [
+            {
+              "family": "Pamplona",
+              "given": ["Vitor", "Fernando"]
+            }
+          ],
+          "birthDate": "1955-01-01"
+        }
+      },
+      {
+        "fullUrl": "resource:1",
+        "resource": {
+          "resourceType": "Immunization",
+          "status": "completed",
+          "vaccineCode": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/sid/cvx",
+                "code": "207"
+              }
+            ]
+          },
+          "patient": {
+            "reference": "resource:0"
+          },
+          "occurrenceDateTime": "2021-07-01",
+          "performer": [
+            {
+              "actor": {
+                "display": "ABC General Hospital"
+              }
+            }
+          ],
+          "lotNumber": "#0001221"
+        }
+      }
+    ]
+  }
+}
