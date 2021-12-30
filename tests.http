@@ -1,6 +1,14 @@
 @API_URL = http://localhost:8000
 
-### Create Cred without any cert
+### Create a blank SHC card
+POST {{API_URL}}/shc  HTTP/1.1
+Content-Type: application/json
+
+{
+  "fhirVersion": "4.0.1"
+}
+
+### Create SHC cert with the info below
 POST {{API_URL}}/shc  HTTP/1.1
 Content-Type: application/json
 
